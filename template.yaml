@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: WhatsApp webhook Lambda
+
+Resources:
+  WhatsAppWebhookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: whatsapp-webhook
+      Handler: main.handler
+      Runtime: python3.11
+      MemorySize: 512
+      Timeout: 15
+      CodeUri: ./src/   # folder containing main.py and requirements
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          VERIFY_TOKEN: "project"
+          WHATSAPP_ACCESS_TOKEN: ""
+          WHATSAPP_PHONE_NUMBER_ID: ""
+          GRAPH_API_VERSION: "v22.0"
+      Events:
+        WebhookApi:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
